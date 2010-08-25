@@ -1,11 +1,15 @@
 Options +FollowSymLinks -Indexes
 
+
 <IfModule mod_rewrite.c>
         RewriteEngine On
         RewriteBase /
 
+	RewriteCond %{ENV:REDIRECT_STATUS} ^$
+	RewriteCond %{REQUEST_URI} ^/public/index\.php(\?path=)?
+	RewriteRule ^(.*)$ public/index.php?path=$1 [L,QSA]
+
         RewriteCond %{REQUEST_URI} !^/public/index\.php(\?path=)?
-        RewriteCond %{DOCUMENT_ROOT} !public/?$
         RewriteRule ^(.*)$ public/index.php?path=$1 [L,QSA]
 
 </IfModule>
