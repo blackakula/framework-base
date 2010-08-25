@@ -1,0 +1,14 @@
+Options +FollowSymLinks -Indexes
+
+<IfModule mod_rewrite.c>
+        RewriteEngine On
+        RewriteBase /
+
+        RewriteCond %{REQUEST_URI} !^/public/index\.php(\?path=)?
+        RewriteCond %{DOCUMENT_ROOT} !public/?$
+        RewriteRule ^(.*)$ public/index.php?path=$1 [L,QSA]
+#        RewriteCond %{REQUEST_URI} !^/index\.php(\?path=)?
+#        RewriteCond %{REQUEST_URI} !^/public/index\.php(\?path=)?
+#        RewriteRule ^(.*)$ public/index.php?r=0&path=$1 [L,QSA]
+
+</IfModule>
