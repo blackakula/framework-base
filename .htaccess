@@ -7,9 +7,9 @@ Options +FollowSymLinks -Indexes
 
 	RewriteCond %{ENV:REDIRECT_STATUS} ^$
 	RewriteCond %{REQUEST_URI} ^/public/index\.php(\?path=)?
-	RewriteRule ^(.*)$ public/index.php?path=$1 [L,QSA]
+	RewriteRule ^(.*)$ public/index.php?__path__=$1 [L,QSA]
 
         RewriteCond %{REQUEST_URI} !^/public/index\.php(\?path=)?
-        RewriteRule ^(.*)$ public/index.php?path=$1 [L,QSA]
+        RewriteRule ^(.*)$ public/index.php?__path__=$1 [L,QSA]
 
 </IfModule>
