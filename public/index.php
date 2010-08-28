@@ -1,4 +1,5 @@
 <?php
+  echo htmlspecialchars($_SERVER['REQUEST_URI'])."<br />\n";
   echo htmlspecialchars($_GET['__path__'])."<br />\n";
   echo htmlspecialchars($_SERVER['QUERY_STRING'])."<br />\n";
   require_once('../config/example_config.php');
