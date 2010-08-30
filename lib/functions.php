@@ -1,12 +1,16 @@
 <?php
   function __autoload($class_name) {
-    if (in_array($class_name, array('Config'))) return;
+    if (in_array($class_name, array('Config','Routing'))) return;
     require_once(ROOT_DIR.'lib'.DIRECTORY_SEPARATOR.$class_name.'.php');
   }
   
   function get_config($param = null) {
     $config = SingletonesFactory::factory('Config');
     return ($param === null) ? $config : $config->get($param);
+  }
+
+  function get_routes() {
+    return SingletonesFactory::factory('Routing');
   }
 
   class SingletonesFactory {
