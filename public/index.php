@@ -5,8 +5,16 @@
   if (!$c->is_readonly()) {
     $c->set('ROOT_DIR', ROOT_DIR);
     $c->set('CONFIG_DIR', ROOT_DIR.'config'.DIRECTORY_SEPARATOR);
+
     foreach (sfYaml::load(get_config('CONFIG_DIR').'base.yml') as $k => $v)
       $c->set(strtoupper($k),$v);
+
+    $dhandle = opendir(get_config('CONFIG_DIR'));
+    while ($fname = readdir($dhandle)) {
+      if (preg_match('/\\.yml$/',$fname) === 0 || $fname === 'base.yml') continue;
+      $config_name = substr($fname,0,strlen($fname)-4);
+      $c->set($config_name,sfYaml::load(get_config('CONFIG_DIR').$fname));
+    }
   }
 
   /* Load Routes */
