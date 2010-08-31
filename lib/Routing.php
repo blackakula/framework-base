@@ -14,7 +14,7 @@
       $result_vars = array();
       $str = $path;
       $regexp_str = '';
-      $parts = array('/');
+      $parts = array();
       preg_match_all('/\\:[a-z_]+/',$path,$variables);
       foreach ($variables[0] as &$var) {
         $str_parts = explode($var,$str,2);
@@ -34,28 +34,32 @@
       $route = new Route($this->parse_path($vars,$path,$parts));
       $route->set_params($vars,$params);
       array_push($this->_routes,$route);
-//      echo '<pre>';
-//      var_dump($route);
-//      echo "</pre>";
     }
 
-    private function _build_url($parts) {
-      $body = array();
+    private function _create_url($parts, $path = false) {
+      $body = array("'".get_config($path ? 'BASE_PATH' : 'ROOT_URL')."'");
       foreach ($parts as &$v) {
         $string_param = "'".str_replace("'","\\'",is_string($v) ? $v : $v[0])."'";
         array_push($body, is_string($v) ? $string_param : '(array_key_exists('.$string_param.',$params) ? $params['.$string_param.'] : "")');
       }
       return 'return '.implode('.',$body).';';
     }
+    private function _create_url_function($name, $parts, $path = false) {
+      $this->_functions[$name] = create_function('$params=array()',$this->_create_url($parts,$path));
+    }
 
     public function connect($path, $params = array()) { $this->_connect($path,$params); }
     public function named($name, $path, $params = array()) {
       $this->_connect($path,$params,$parts);
-      $this->_functions[$name] = create_function('$params=array()',$this->_build_url($parts));
+      $this->_create_url_function($name.'_url',$parts);
+      $this->_create_url_function($name.'_path',$parts,true);
     }
 
-    public function build($name, $params = array()) {
+    private function _build($name, $params = array()) {
       return array_key_exists($name,$this->_functions) ? $this->_functions[$name]($params) : null;
     }
+
+    public function build_url($name, $params = array()) { return $this->_build($name.'_url',$params); }
+    public function build_path($name, $params = array()) { return $this->_build($name.'_path',$params); }
   }
 ?>

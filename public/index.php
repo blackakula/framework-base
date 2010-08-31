@@ -1,13 +1,15 @@
 <?php
-  echo htmlspecialchars($_SERVER['REQUEST_URI'])."<br />\n";
-  echo htmlspecialchars($_SERVER['QUERY_STRING'])."<br />\n";
+//  echo htmlspecialchars($_SERVER['REQUEST_URI'])."<br />\n";
+//  echo htmlspecialchars($_SERVER['QUERY_STRING'])."<br />\n";
 
+  /* Load Config */
   require_once('../config/example_config.php');
+  $c = get_config();
+  foreach (sfYaml::load(get_config('CONFIG_DIR').'base.yml') as $k => $v)
+    $c->set(strtoupper($k),$v);
+//  var_dump($c);
+
+  /* Load Routes */
   require_once(get_config('CONFIG_DIR').'routes.php');
 
-//  $d = get_config();
-//  echo $c->get('ROOT_DIR').'<br />';
-//  echo $d->get('ROOT_DIR').'<br />';
-//  echo get_config()->get('ROOT_DIR').'<br />';
-  echo get_config('ROOT_DIR').'<br />';
 ?>
