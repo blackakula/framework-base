@@ -56,10 +56,20 @@
     }
 
     private function _build($name, $params = array()) {
-      return array_key_exists($name,$this->_functions) ? $this->_functions[$name]($params) : null;
+      if (!array_key_exists($name,$this->_functions))
+        throw new RoutingException('Tried to build undefined route');
+      return $this->_functions[$name]($params);
     }
 
     public function build_url($name, $params = array()) { return $this->_build($name.'_url',$params); }
     public function build_path($name, $params = array()) { return $this->_build($name.'_path',$params); }
+
+    public function checkout($url) {
+      foreach ($this->_routes as &$route) {
+        $result = $route->check($url);
+        if ($result) return $result;
+      }
+      return false;
+    }
   }
 ?>

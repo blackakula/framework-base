@@ -1,11 +1,16 @@
 <?php
   function __autoload($class_name) {
     $lib_dir = ROOT_DIR.'lib'.DIRECTORY_SEPARATOR;
+    $filename = $class_name.'.php';
     if (in_array($class_name, array('Config','Routing'))) return;
     elseif ($class_name == 'sfYaml')
-      require_once($lib_dir.'sfYaml'.DIRECTORY_SEPARATOR.'sfYaml.php');
+      require_once($lib_dir.'sfYaml'.DIRECTORY_SEPARATOR.$filename);
+    elseif (preg_match('/.Controller$/',$class_name) !== 0)
+      require_once(ROOT_DIR.'app'.DIRECTORY_SEPARATOR.'controllers'.DIRECTORY_SEPARATOR.$filename);
+    elseif (preg_match('/.Exception$/',$class_name) !== 0)
+      require_once($lib_dir.'exceptions'.DIRECTORY_SEPARATOR.$filename);
     else
-      require_once($lib_dir.$class_name.'.php');
+      require_once($lib_dir.$filename);
   }
   
   function get_config($param = null) {

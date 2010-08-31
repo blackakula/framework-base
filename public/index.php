@@ -1,15 +1,18 @@
 <?php
-//  echo htmlspecialchars($_SERVER['REQUEST_URI'])."<br />\n";
-//  echo htmlspecialchars($_SERVER['QUERY_STRING'])."<br />\n";
-
   /* Load Config */
   require_once('../config/example_config.php');
   $c = get_config();
   foreach (sfYaml::load(get_config('CONFIG_DIR').'base.yml') as $k => $v)
     $c->set(strtoupper($k),$v);
-//  var_dump($c);
 
   /* Load Routes */
   require_once(get_config('CONFIG_DIR').'routes.php');
-
+  $uri = parse_url($_SERVER['REQUEST_URI']);
+  $r = get_routes();
+  $params = $r->checkout($uri['path']);
+  if (!array_key_exists('controller',$params))
+    throw new RoutingException('Controller was not set in current routing');
+  if (!array_key_exists('action',$params))
+    $params['action'] = 'index';
+//  echo '<pre>';var_dump($params);echo '</pre>';
 ?>

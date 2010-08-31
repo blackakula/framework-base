@@ -13,10 +13,23 @@
       $this->_vars = array();
       $this->_params = array();
       foreach ($vars as $k => $v)
-        $this->_vars[$k] = array_key_exists($v,$params) ? array($v,Route::regexp_str($params[$v])) : $v;
+        $this->_vars[$k] = array_key_exists($v,$params) ? array($v,Route::regexp_str('^'.$params[$v].'$')) : $v;
       foreach ($params as $k => $v)
         if (preg_match('/^\\:[a-z_]+$/',$k) === 0)
           $this->_params[$k] = $v;
+    }
+
+    public function check($url) {
+      if (preg_match($this->_regexp,$url,$matches) === 0) return false;
+      $result_params = array();
+      foreach ($this->_vars as $k => $v) {
+        if (is_array($v)) {
+          if (preg_match($v[1],$matches[$k+1]) === 0) return false;
+          else $v = $v[0];
+        }
+        $result_params[substr($v,1)] = $matches[$k+1];
+      }
+      return array_merge($result_params,$this->_params);
     }
   }
 ?>
