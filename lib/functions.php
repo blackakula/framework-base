@@ -21,16 +21,29 @@
   function get_routes() {
     return SingletonesFactory::factory('Routing');
   }
+  
+  function obj_serialize($obj) { return str_replace("\0", "~~NULL_BYTE~~", serialize($obj)); }
+  function obj_unserialize($str) { return unserialize(str_replace("~~NULL_BYTE~~", "\0", $str)); }
+  function singleton_cache_file($var) { return ROOT_DIR.'cache'.DIRECTORY_SEPARATOR.(is_string($var) ? $var : get_class($var)); }
 
   class SingletonesFactory {
     public static $_singletones = array();
 
     public static function factory($type) {
-      if (true !== include_once(ROOT_DIR.'lib'.DIRECTORY_SEPARATOR.$type.'.php'))
-        self::$_singletones[$type] = new $type;
+      if (true !== include_once(ROOT_DIR.'lib'.DIRECTORY_SEPARATOR.$type.'.php')){
+        $cache_file_name = singleton_cache_file($type);
+        $cache_exists = file_exists($cache_file_name);
+        self::$_singletones[$type] = $cache_exists ? obj_unserialize(file_get_contents($cache_file_name)) : (new $type);
+        if ($cache_exists) self::$_singletones[$type]->readonly();
+        var_dump(self::$_singletones[$type]);
+      }
       if (!array_key_exists($type, self::$_singletones))
         throw new Exception('Singleton not found');
       return self::$_singletones[$type];
     }
-}
+  }
+
+  function cache_obj($obj) {
+    file_put_contents(singleton_cache_file($obj),obj_serialize($obj));
+  }
 ?>

@@ -1,11 +1,12 @@
 <?php
-  class Routing {
+  class Routing extends SingletonObj {
     private $_routes;
     private $_functions;
 
     public function __construct() {
       $this->_routes = array();
       $this->_functions = array();
+      parent::__construct();
     }
 
     private function parse_path(&$result_vars, $path = '/', &$parts = null) {
@@ -31,6 +32,7 @@
     }
 
     private function _connect($path, $params = array(), &$parts = null) {
+      if ($this->is_readonly()) return;
       $route = new Route($this->parse_path($vars,$path,$parts));
       $route->set_params($vars,$params);
       array_push($this->_routes,$route);
@@ -45,6 +47,7 @@
       return 'return '.implode('.',$body).';';
     }
     private function _create_url_function($name, $parts, $path = false) {
+      if ($this->is_readonly()) return;
       $this->_functions[$name] = create_function('$params=array()',$this->_create_url($parts,$path));
     }
 
