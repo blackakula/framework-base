@@ -1,11 +1,13 @@
 <?php
   /* Load Config */
-  require_once('../config/example_config.php');
+  require_once('../config/setup.php');
   $c = get_config();
-  $c->set('ROOT_DIR', ROOT_DIR);
-  $c->set('CONFIG_DIR', ROOT_DIR.'config'.DIRECTORY_SEPARATOR);
-  foreach (sfYaml::load(get_config('CONFIG_DIR').'base.yml') as $k => $v)
-    $c->set(strtoupper($k),$v);
+  if (!$c->is_readonly()) {
+    $c->set('ROOT_DIR', ROOT_DIR);
+    $c->set('CONFIG_DIR', ROOT_DIR.'config'.DIRECTORY_SEPARATOR);
+    foreach (sfYaml::load(get_config('CONFIG_DIR').'base.yml') as $k => $v)
+      $c->set(strtoupper($k),$v);
+  }
 
   /* Load Routes */
   require_once(get_config('CONFIG_DIR').'routes.php');

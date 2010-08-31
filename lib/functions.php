@@ -35,7 +35,6 @@
         $cache_exists = file_exists($cache_file_name);
         self::$_singletones[$type] = $cache_exists ? obj_unserialize(file_get_contents($cache_file_name)) : (new $type);
         if ($cache_exists) self::$_singletones[$type]->readonly();
-        var_dump(self::$_singletones[$type]);
       }
       if (!array_key_exists($type, self::$_singletones))
         throw new Exception('Singleton not found');

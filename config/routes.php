@@ -1,4 +1,6 @@
 <?php
   $r = get_routes();
-  $r->connect('/',array('controller' => 'home'));
+  if (!$r->is_readonly()) {
+    $r->connect('/',array('controller' => 'home'));
+  }
 ?>
