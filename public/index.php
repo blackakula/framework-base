@@ -17,15 +17,16 @@
     }
   }
 
-  /* Load Routes */
+  /* Load Routes and setting params */
   require_once(get_config('CONFIG_DIR').'routes.php');
   $uri = parse_url($_SERVER['REQUEST_URI']);
   $r = get_routes();
-  $params = $r->checkout($uri['path']);
-  if (!array_key_exists('controller',$params))
+  $route_params = $r->checkout($uri['path']);
+  if (!array_key_exists('controller',$route_params))
     throw new RoutingException('Controller was not set in current routing');
-  if (!array_key_exists('action',$params))
-    $params['action'] = 'index';
+  if (!array_key_exists('action',$route_params))
+    $route_params['action'] = 'index';
+  $params = array_merge($_GET,$_POST,$route_params);
 
   cache_obj(get_config());
   cache_obj(get_routes());
