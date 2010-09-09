@@ -30,7 +30,17 @@
     $route_params['action'] = 'index';
   $params = array_merge($_GET,$_POST,$route_params);
 
+  $controller = ucfirst($params['controller']).'Controller';
+  $action = $params['action'];
+  unset($params['controller']);
+  unset($params['action']);
+
+  if (!class_exists($controller)) throw new RoutingException('Controller "'.$controller.'" was not found');
+  if (!is_callable(array($controller, $action))) throw new RoutingException('Action "'.$action.'" was not found in controller "'.$controller.'"');
+
+  $c = new $controller($params);
+  $c->$action();
+
   cache_obj(get_config());
   cache_obj(get_routes());
-  echo '<pre>';var_dump($params);echo '</pre>';
 ?>
