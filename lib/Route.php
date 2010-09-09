@@ -28,7 +28,7 @@
           else $v = $v[0];
         }
         $key = substr($v,1);
-        if (!empty($matches[$k+1]) || !array_key_exists($key,$this->_params);
+        if (!empty($matches[$k+1]) || !array_key_exists($key,$this->_params))
           $result_params[$key] = $matches[$k+1];
       }
       return array_merge($this->_params,$result_params);

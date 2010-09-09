@@ -22,6 +22,8 @@
   $uri = parse_url($_SERVER['REQUEST_URI']);
   $r = get_routes();
   $route_params = $r->checkout($uri['path']);
+  if (!$route_params)
+    throw new RoutingException('404 - need to add params');
   if (!array_key_exists('controller',$route_params))
     throw new RoutingException('Controller was not set in current routing');
   if (!array_key_exists('action',$route_params))
