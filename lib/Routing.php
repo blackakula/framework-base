@@ -11,6 +11,8 @@
 
     private function parse_path(&$result_vars, $path = '/', &$parts = null) {
       if ($path[0] === '/') $path = substr($path,1);
+      while (false !== ($pos = strpos($path,'(')) && substr($path,$pos,3) !== '(?:')
+        $path = substr($path,0,$pos).'(?:'.substr($path,$pos+1);
 
       $result_vars = array();
       $str = $path;

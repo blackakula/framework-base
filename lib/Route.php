@@ -16,7 +16,7 @@
         $this->_vars[$k] = array_key_exists($v,$params) ? array($v,Route::regexp_str('^'.$params[$v].'$')) : $v;
       foreach ($params as $k => $v)
         if (preg_match('/^\\:[a-z_]+$/',$k) === 0)
-          $this->_params[$k] = $v;
+          $this->_params[$k] = (string)$v;
     }
 
     public function check($url) {
