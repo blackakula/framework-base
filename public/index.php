@@ -30,6 +30,7 @@
     $route_params['action'] = 'index';
   $params = array_merge($_GET,$_POST,$route_params);
 
+  $controller_name = $params['controller'];
   $controller = ucfirst($params['controller']).'Controller';
   $action = $params['action'];
   unset($params['controller']);
@@ -40,6 +41,9 @@
 
   $c = new $controller($params);
   $c->$action();
+
+  $t = new Template($controller_name,$action,$c->get());
+  $t->layout();
 
   cache_obj(get_config());
   cache_obj(get_routes());

@@ -10,7 +10,7 @@
       $full_name = ROOT_DIR.'app'.DIRECTORY_SEPARATOR.'controllers'.DIRECTORY_SEPARATOR.$filename;
     elseif (preg_match('/.Exception$/',$class_name) !== 0)
       $full_name = $lib_dir.'exceptions'.DIRECTORY_SEPARATOR.$filename;
-    if (file_exists($full_name) && is_file($full_name) && is_readable($full_name))
+    if (is_readable($full_name))
       require_once($full_name);
   }
   
@@ -33,7 +33,7 @@
     public static function factory($type) {
       if (true !== include_once(ROOT_DIR.'lib'.DIRECTORY_SEPARATOR.$type.'.php')){
         $cache_file_name = singleton_cache_file($type);
-        $cache_exists = file_exists($cache_file_name) && is_file($cache_file_name) && is_readable($cache_file_name);
+        $cache_exists = is_readable($cache_file_name);
         self::$_singletones[$type] = $cache_exists ? obj_unserialize(file_get_contents($cache_file_name)) : (new $type);
         if ($cache_exists) self::$_singletones[$type]->readonly();
       }

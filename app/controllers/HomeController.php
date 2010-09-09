@@ -1,7 +1,8 @@
 <?php
   class HomeController extends Controller {
     public function index() {
-      echo 'This is index action of Home controller';
+      $this->set('title','This is Home page example');
+      $this->set('text','This is example of another variable');
     }
   }
 ?>
