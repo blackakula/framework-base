@@ -27,9 +27,11 @@
           if (preg_match($v[1],$matches[$k+1]) === 0) return false;
           else $v = $v[0];
         }
-        $result_params[substr($v,1)] = $matches[$k+1];
+        $key = substr($v,1);
+        if (!empty($matches[$k+1]) || !array_key_exists($key,$this->_params);
+          $result_params[$key] = $matches[$k+1];
       }
-      return array_merge($result_params,$this->_params);
+      return array_merge($this->_params,$result_params);
     }
   }
 ?>
