@@ -57,12 +57,16 @@
       $layout = '404';
       $template = 'index';
     }
-  }
+  }else
+    $c = new ApplicationController(array());
+
   if ($h->is404()){
     $layout = '404';
     $template = 'index';
   }
+
   $t = new Template($layout,$template,$c->get());
+  $h->send_headers();
   $t->layout();
 
   cache_obj(get_config());
