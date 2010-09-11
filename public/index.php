@@ -17,32 +17,52 @@
     }
   }
 
+  $h = get_header();
+
   /* Load Routes and setting params */
   require_once(get_config('CONFIG_DIR').'routes.php');
   $uri = parse_url($_SERVER['REQUEST_URI']);
   $r = get_routes();
   $route_params = $r->checkout($uri['path']);
-  if (!$route_params)
-    throw new RoutingException('404 - need to add params');
-  if (!array_key_exists('controller',$route_params))
-    throw new RoutingException('Controller was not set in current routing');
-  if (!array_key_exists('action',$route_params))
-    $route_params['action'] = 'index';
-  $params = array_merge($_GET,$_POST,$route_params);
+  if (!$route_params) $h->page404();
 
-  $controller_name = $params['controller'];
-  $controller = ucfirst($params['controller']).'Controller';
-  $action = $params['action'];
-  unset($params['controller']);
-  unset($params['action']);
+  if (!$h->is404()) {
+    if (!array_key_exists('controller',$route_params))
+      throw new RoutingException('Controller was not set in current routing');
+    if (!array_key_exists('action',$route_params))
+      $route_params['action'] = 'index';
+    $params = array_merge($_GET,$_POST,$route_params);
 
-  if (!class_exists($controller)) throw new RoutingException('Controller "'.$controller.'" was not found');
-  if (!is_callable(array($controller, $action))) throw new RoutingException('Action "'.$action.'" was not found in controller "'.$controller.'"');
+    $controller_name = $params['controller'];
+    $controller = ucfirst($params['controller']).'Controller';
+    $action = $params['action'];
+    unset($params['controller']);
+    unset($params['action']);
 
-  $c = new $controller($params);
-  $c->$action();
+    if (!class_exists($controller)) throw new RoutingException('Controller "'.$controller.'" was not found');
+    if (!is_callable(array($controller, $action))) throw new RoutingException('Action "'.$action.'" was not found in controller "'.$controller.'"');
 
-  $t = new Template($controller_name,$action,$c->get());
+    $c = new $controller($params);
+    try { $c->$action(); } catch (Exception $e) {
+      throw new BaseException('Uncaught exception in action "'.$action.'" of controller "'.$controller.'": '.$e->getMessage());
+    }
+
+    if (!$h->is404()) {
+      $layout = $c->layout();
+      if (is_null($layout)) $layout = $controller_name;
+      $template = $c->template();
+      if (is_null($template)) $template = $action;
+
+    } else {
+      $layout = '404';
+      $template = 'index';
+    }
+  }
+  if ($h->is404()){
+    $layout = '404';
+    $template = 'index';
+  }
+  $t = new Template($layout,$template,$c->get());
   $t->layout();
 
   cache_obj(get_config());

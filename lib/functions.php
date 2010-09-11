@@ -3,7 +3,7 @@
     $lib_dir = ROOT_DIR.'lib'.DIRECTORY_SEPARATOR;
     $filename = $class_name.'.php';
     $full_name = $lib_dir.$filename;
-    if (in_array($class_name, array('Config','Routing'))) return;
+    if (in_array($class_name, array('Config','Routing','HttpHeader'))) return;
     elseif ($class_name == 'sfYaml')
       $full_name = $lib_dir.'sfYaml'.DIRECTORY_SEPARATOR.$filename;
     elseif (preg_match('/.Controller$/',$class_name) !== 0)
@@ -18,10 +18,8 @@
     $config = SingletonesFactory::factory('Config');
     return ($param === null) ? $config : $config->get($param);
   }
-
-  function get_routes() {
-    return SingletonesFactory::factory('Routing');
-  }
+  function get_routes() { return SingletonesFactory::factory('Routing'); }
+  function get_header() { return SingletonesFactory::factory('HttpHeader'); }
   
   function obj_serialize($obj) { return str_replace("\0", "~~NULL_BYTE~~", serialize($obj)); }
   function obj_unserialize($str) { return unserialize(str_replace("~~NULL_BYTE~~", "\0", $str)); }
@@ -30,7 +28,7 @@
   class SingletonesFactory {
     public static $_singletones = array();
 
-    public static function factory($type) {
+    public static function &factory($type) {
       if (true !== include_once(ROOT_DIR.'lib'.DIRECTORY_SEPARATOR.$type.'.php')){
         $cache_file_name = singleton_cache_file($type);
         $cache_exists = is_readable($cache_file_name);

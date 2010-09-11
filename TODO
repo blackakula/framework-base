@@ -1,8 +1,7 @@
-1. Add 404 page
-2. Add custom layout/template (possability to set them in action)
-3. Think about render function in action like in Rails
-4. Response codes
-5. Catch all errors
-6. Cache
-7. Helpers for view
-8. Forms (with validation)
+Think about render function in action like in Rails
+Response codes
+Catch all errors
+Cache
+Helpers for view
+Forms (with validation)
+proper redirects (cookies save in forms validation)
