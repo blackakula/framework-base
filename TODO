@@ -1,7 +1,7 @@
+includes partial in template
 Think about render function in action like in Rails
-Response codes
-Catch all errors
 Cache
 Helpers for view
 Forms (with validation)
 proper redirects (cookies save in forms validation)
+Catch all errors
