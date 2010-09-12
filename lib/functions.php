@@ -4,6 +4,8 @@
     $filename = $class_name.'.php';
     $full_name = $lib_dir.$filename;
     if (in_array($class_name, array('Config','Routing','HttpHeader'))) return;
+    elseif ($class_name == 'ApplicationTemplate')
+      $full_name = ROOT_DIR.'app'.DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR.$filename;
     elseif ($class_name == 'sfYaml')
       $full_name = $lib_dir.'sfYaml'.DIRECTORY_SEPARATOR.$filename;
     elseif (preg_match('/.Controller$/',$class_name) !== 0)

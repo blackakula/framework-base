@@ -65,7 +65,7 @@
     $template = 'index';
   }
 
-  $t = new Template($layout,$template,$c->get());
+  $t = new ApplicationTemplate($layout,$template,$c->get());
   $h->send_headers();
   $t->layout();
 
