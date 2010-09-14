@@ -3,14 +3,14 @@
   /* Load Config */
   require_once(ROOT_DIR.'config'.DIRECTORY_SEPARATOR.'setup.php');
 
-  Dispatcher::config();
+  MyDispatcher::config();
 
   /* Load Routes and setting params */
   if (!get_routes()->is_readonly())
     require_once(get_config('CONFIG_DIR').'routes.php');
 
-  Dispatcher::routing();
-  Dispatcher::control();
-  Dispatcher::render();
-  Dispatcher::finalize();
+  MyDispatcher::routing();
+  MyDispatcher::control();
+  MyDispatcher::render();
+  MyDispatcher::finalize();
 ?>

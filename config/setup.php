@@ -2,8 +2,10 @@
   function __autoload($class_name) {
     $lib_dir = ROOT_DIR.'lib'.DIRECTORY_SEPARATOR;
     $filename = $class_name.'.php';
-    $full_name = $lib_dir.$filename;
+    $full_name = $lib_dir.'my'.DIRECTORY_SEPARATOR.$filename;
+
     if (in_array($class_name, array('Config','Routing','HttpHeader'))) return;
+    elseif (is_readable($full_name));
     elseif ($class_name == 'ApplicationTemplate')
       $full_name = ROOT_DIR.'app'.DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR.$filename;
     elseif ($class_name == 'sfYaml')
@@ -12,8 +14,9 @@
       $full_name = ROOT_DIR.'app'.DIRECTORY_SEPARATOR.'controllers'.DIRECTORY_SEPARATOR.$filename;
     elseif (preg_match('/.Exception$/',$class_name) !== 0)
       $full_name = $lib_dir.'exceptions'.DIRECTORY_SEPARATOR.$filename;
-    if (is_readable($full_name))
-      require_once($full_name);
+
+    if (!is_readable($full_name)) $full_name = $lib_dir.$filename;
+    if (is_readable($full_name)) require_once($full_name);
   }
   
   function get_config($param = null) {
