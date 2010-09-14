@@ -7,12 +7,14 @@
     protected $action;
     protected $extentions;
     protected $check_template;
+    protected $render_layout;
 
     public function __construct($controller,$action,$params) {
       parent::__construct();
       $this->_params = $params;
-      $this->view_path = get_config('ROOT_DIR').DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR;
-      $this->controller = $controller;
+      $this->view_path = get_config('ROOT_DIR').'app'.DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR;
+      $this->render_layout = !is_array($controller);
+      $this->controller = $this->render_layout ? $controller : $controller[0];
       $this->action = $action;
       $this->extentions = array('php');
     }
@@ -26,14 +28,16 @@
     }
 
     public function layout() {
-      $filepath = $this->view_path.DIRECTORY_SEPARATOR.(Template::LAYOUT_FOLDER).DIRECTORY_SEPARATOR;
+      if (!$this->render_layout) return $this->content();
+      $filepath = $this->view_path.(Template::LAYOUT_FOLDER).DIRECTORY_SEPARATOR;
       $layout = $this->find_view_extention($filepath.$this->controller);
       if (!$layout) $layout = $this->find_view_extention($filepath.'layout');
       $layout ? $this->render($layout[0],$layout[1]) : $this->content();
     }
 
     public function content() {
-      $template = $this->find_view_extention($this->view_path.DIRECTORY_SEPARATOR.$this->controller.DIRECTORY_SEPARATOR.$this->action);
+      if ($this->action === false) return;
+      $template = $this->find_view_extention($this->view_path.$this->controller.DIRECTORY_SEPARATOR.$this->action);
       if ($template) $this->render($template[0],$template[1]);
       else throw new RoutingException('Template for action "'.$this->action.'" of controller "'.$this->controller.'" not found');
     }

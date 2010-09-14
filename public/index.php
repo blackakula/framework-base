@@ -50,6 +50,7 @@
     if (!$h->is404()) {
       $layout = $c->layout();
       if (is_null($layout)) $layout = $controller_name;
+      if ($layout === false) $layout = array($controller_name);
       $template = $c->template();
       if (is_null($template)) $template = $action;
 
