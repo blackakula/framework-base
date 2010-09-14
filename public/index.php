@@ -1,6 +1,6 @@
 <?php
   /* Load Config */
-  require_once('../config/setup.php');
+  require_once('..'.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'setup.php');
   $c = get_config();
   if (!$c->is_readonly()) {
     $c->set('ROOT_DIR', ROOT_DIR);
