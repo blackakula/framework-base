@@ -1,0 +1,44 @@
+!!!
+%html
+  %head
+    = include_http_metas()
+    = include_metas()
+    = include_title()
+    %link{:rel => 'shortcut icon', :href => '/favicon.ico'}
+    - if (@$autodiscovery)
+      = auto_discovery_link_tag('rss', $autodiscovery["link"], array("type" => 'application/atom+xml', 'title' => $autodiscovery["title"])
+    - endif
+    /
+      [if lt IE 7]>
+      <link rel="stylesheet" type="text/css" href="/css/ie6fix.css" />
+      <![endif]
+    %javascript
+      function antispam(ext,domain,name) {
+        document.write('<a href=\"mailto:' + name + '@' + domain + '.' + ext + '\">');
+        document.write(name + '@' + domain + '.' + ext + '</a>');
+      }
+  %body
+    #doc.yui-t7
+      #hd{:style => 'background: url(/pics/top-orange-band.gif) left top #EE9933; width: 780px'}
+        #header{:style => 'width: 780px;'}
+          #branding
+            = link_to(image_tag("/pics/logo.gif"), "/")
+          - if (@$trivia)
+            %br
+            %br
+            %span
+              %font{:size => 3} Did you know...
+              %br
+              %font{:size => 2}
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                = $trivia->getContent()
+          - endif
+      #bd
+        .yui-g{:style => 'background: #E9B26E; width: 780px'}
+          = include_partial('global/main_navigation')
+        .yui-g{:style => 'background: #fff'}
+          = $sf_data->getRaw('sf_content')
+          %br
+          %br
+      #ft
+        = include_partial('global/main_footer')
