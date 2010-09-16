@@ -1,9 +1,9 @@
 <html>
   <head>
-    <title><?=$this->get('title')?></title>
+    <title><?=$title?></title>
   </head>
   <body>
-    <?=$this->get('text')?><br />
+    <?=$text?><br />
     <?=$this->content()?>
   </body>
 </html>
