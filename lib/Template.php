@@ -42,10 +42,7 @@
       else throw new RoutingException('Template for action "'.$this->action.'" of controller "'.$this->controller.'" not found');
     }
 
-    public function render($filename, $ext = 'php') {
-      foreach ($this->get() as $k => $v) $$k = $v;
-      include($filename);
-    }
+    public function render($filename, $ext = 'php') { include($filename); }
 
     public function _include($path, $global = false) {
       $parts = array($global ? Template::LAYOUT_FOLDER : $this->controller, $path);
