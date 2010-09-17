@@ -20,11 +20,16 @@
     }
 
     private function find_view_extention($full_file_path_without_extention) {
+      $view_file = false;
       foreach ($this->extentions as $extention){
         $filename = $full_file_path_without_extention.'.'.$extention;
-        if (is_readable($filename)) return array($filename,$extention);
+        if (is_readable($filename)) {
+          $mod_date = filemtime($filename);
+          if (!$view_file || $mod_date > $view_file[2])
+            $view_file = array($filename,$extention,$mod_date);
+        }
       }
-      return false;
+      return $view_file;
     }
 
     public function layout() {
