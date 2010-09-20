@@ -10,8 +10,6 @@
       $full_name = ROOT_DIR.'app'.DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR.$filename;
     elseif ($class_name == 'sfYaml')
       $full_name = $lib_dir.'sfYaml'.DIRECTORY_SEPARATOR.$filename;
-//    elseif ($class_name == 'HamlParser')
-//      $full_name = $lib_dir.'haml'.DIRECTORY_SEPARATOR.'HamlParser.class.php';
     elseif (preg_match('/.Controller$/',$class_name) !== 0)
       $full_name = ROOT_DIR.'app'.DIRECTORY_SEPARATOR.'controllers'.DIRECTORY_SEPARATOR.$filename;
     elseif (preg_match('/.Exception$/',$class_name) !== 0)
