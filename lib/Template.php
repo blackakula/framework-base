@@ -9,6 +9,8 @@
     protected $check_template;
     protected $render_layout;
 
+    protected static $_css = '/css/';
+
     public function __construct($controller,$action,$params) {
       parent::__construct();
       $this->_params = $params;
@@ -58,6 +60,12 @@
       $included = $this->find_view_extention($this->view_path.$parts[0].DIRECTORY_SEPARATOR.$parts[1]);
       if (!$included) throw new RoutingException('Partial template '.$path.' not found (global: '.($global ? 'true' : 'false').')');
       $this->render($included[0],$included[1]);
+    }
+
+    public static function setCSS($base_url) { self::$_css = $base_url; }
+    public function _css($src, $global = false, $media = 'screen') {
+      if (!$global) $src = (self::$_css).$src;
+      return '<link rel="stylesheet" href="'.$src.'" type="text/css" media="'.$media.'" />';
     }
   }
 ?>
