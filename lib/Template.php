@@ -10,6 +10,8 @@
     protected $render_layout;
 
     protected static $_css = '/css/';
+    protected static $_js = '/js/';
+    protected static $_img = '/img/';
 
     public function __construct($controller,$action,$params) {
       parent::__construct();
@@ -63,9 +65,33 @@
     }
 
     public static function setCSS($base_url) { self::$_css = $base_url; }
+    public static function setJS($base_url) { self::$_js = $base_url; }
+    public static function setIMG($base_url) { self::$_img = $base_url; }
+
     public function _css($src, $global = false, $media = 'screen') {
       if (!$global) $src = (self::$_css).$src;
-      return '<link rel="stylesheet" href="'.$src.'" type="text/css" media="'.$media.'" />';
+      return '<link rel="stylesheet" href="'.htmlspecialchars($src).'" type="text/css" media="'.$media.'" />';
+    }
+
+    public function _js($src, $global = false) {
+      if (!$global) $src = (self::$_js).$src;
+      return '<script type="text/javascript" src="'.htmlspecialchars($src).'"></script>';
+    }
+
+    public function _img($src, $alt = null, $global = false, $attr = array()) {
+      if (!$global) $src = (self::$_img).$src;
+      if (is_null($alt)) {
+        $pos_l = strrpos($src,'/');
+        if ($pos_l === false) $pos_l = -1;
+        $pos_r = strrpos($src,'.');
+        if ($pos_r === false || $pos_r < $pos_l + 2) $pos_r = strlen($src);
+        $alt = ucwords(strtolower(str_replace('_',' ',str_replace('-',' ',substr($src,$pos_l + 1,($pos_r-$pos_l-1))))));
+      }
+      $attr['src'] = $src;
+      $attr['alt'] = $alt;
+      foreach ($attr as $k => $v)
+        $attr[$k] = $k.'="'.((substr($k,0,2) == 'on' || $k == 'style') ? $v : htmlspecialchars($v)).'"';
+      return '<img '.implode(' ',$attr).' />';
     }
   }
 ?>
