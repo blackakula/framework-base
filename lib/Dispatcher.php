@@ -23,6 +23,11 @@
           $c->set($config_name,sfYaml::load(get_config('CONFIG_DIR').$fname));
         }
       }
+
+      Template::setCSS($c->get('BASE_PATH').'css/');
+      Template::setJS($c->get('BASE_PATH').'js/');
+      Template::setIMG($c->get('BASE_PATH').'img/');
+      Template::setICO($c->get('BASE_PATH'));
     }
 
     public static function routing() {

@@ -12,6 +12,7 @@
     protected static $_css = '/css/';
     protected static $_js = '/js/';
     protected static $_img = '/img/';
+    protected static $_icon = '/';
 
     public function __construct($controller,$action,$params) {
       parent::__construct();
@@ -67,6 +68,7 @@
     public static function setCSS($base_url) { self::$_css = $base_url; }
     public static function setJS($base_url) { self::$_js = $base_url; }
     public static function setIMG($base_url) { self::$_img = $base_url; }
+    public static function setICO($base_url) { self::$_icon = $base_url; }
 
     public function _css($src, $global = false, $media = 'screen') {
       if (!$global) $src = (self::$_css).$src;
@@ -92,6 +94,11 @@
       foreach ($attr as $k => $v)
         $attr[$k] = $k.'="'.((substr($k,0,2) == 'on' || $k == 'style') ? $v : htmlspecialchars($v)).'"';
       return '<img '.implode(' ',$attr).' />';
+    }
+
+    public function _icon($src, $rel = 'Shortcut Icon', $global = false) {
+      if (!$global) $src = (self::$_icon).$src;
+      return '<link rel="'.htmlspecialchars($rel).'" type="image/x-icon" href="'.htmlspecialchars($src).'" />';
     }
   }
 ?>
