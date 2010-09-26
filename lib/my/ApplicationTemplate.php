@@ -15,7 +15,7 @@
       include($php_file_name);
     }
 
-    public function _var($var) { return '$this->get(\''.$var.'\')'; }
+    public function _var($var) { return '(is_null($this->get(\''.$var.'\')) ? $'.$var.' : $this->get(\''.$var.'\'))'; }
     public function _eval($str) {
       $func = $this->parse_function($str);
       return call_user_func_array(array($this,$func[0]),$func[1]);
