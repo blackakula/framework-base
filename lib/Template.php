@@ -61,8 +61,12 @@
       $parts[1] = '_'.$parts[1];
 
       $included = $this->find_view_extention($this->view_path.$parts[0].DIRECTORY_SEPARATOR.$parts[1]);
-      if (!$included) throw new RoutingException('Partial template '.$path.' not found (global: '.($global ? 'true' : 'false').')');
-      $this->render($included[0],$included[1]);
+      if (!$included && !$global)
+        $this->_include($path,true);
+      else {
+        if (!$included) throw new RoutingException('Partial template '.$path.' not found (global: '.($global ? 'true' : 'false').')');
+        $this->render($included[0],$included[1]);
+      }
     }
 
     public static function setCSS($base_url) { self::$_css = $base_url; }
