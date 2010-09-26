@@ -29,6 +29,7 @@
         array_push($result_vars,$var);
       }
       $regexp_str .= $str;
+      if (!empty($str)) array_push($parts,$str);
       
       return '^/'.$regexp_str.'$';
     }
