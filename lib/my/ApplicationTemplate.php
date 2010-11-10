@@ -18,7 +18,7 @@
     public function _var($var) { return '(is_null($this->get(\''.$var.'\')) ? $'.$var.' : $this->get(\''.$var.'\'))'; }
     public function _eval($str) {
       $func = $this->parse_function($str);
-      return call_user_func_array(array($this,$func[0]),$func[1]);
+      return call_user_func_array(array($this,$func[0]),array($func[1]));
     }
 
     protected function parse_function($str) {

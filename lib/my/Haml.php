@@ -175,7 +175,7 @@
     }
 
     protected function getVariable($var) {
-      $str = is_null($this->_context) ? $var : call_user_func_array($this->_context,substr($var,1));
+      $str = is_null($this->_context) ? $var : call_user_func_array($this->_context,array(substr($var,1)));
       return $this->_echo($str);
     }
 
@@ -184,7 +184,7 @@
     }
 
     protected function _eval($str) {
-      return is_null($this->_eval_context) ? eval($str) : call_user_func_array($this->_eval_context,$str);
+      return is_null($this->_eval_context) ? eval($str) : call_user_func_array($this->_eval_context,array($str));
     }
 
     protected function pushStack($element, $deep = null) {
