@@ -28,7 +28,10 @@
   
   function obj_serialize($obj) { return str_replace("\0", "~~NULL_BYTE~~", serialize($obj)); }
   function obj_unserialize($str) { return unserialize(str_replace("~~NULL_BYTE~~", "\0", $str)); }
-  function singleton_cache_file($var) { return ROOT_DIR.'cache'.DIRECTORY_SEPARATOR.(is_string($var) ? $var : get_class($var)); }
+  function singleton_cache_file($var) {
+  	$cache_dir = ROOT_DIR.'cache';
+  	return is_writable($cache_dir) ? $cache_dir.DIRECTORY_SEPARATOR.(is_string($var) ? $var : get_class($var)) : null;
+  }
 
   class SingletonesFactory {
     public static $_singletones = array();
@@ -48,7 +51,7 @@
 
   function cache_obj($obj) {
     $file_name = singleton_cache_file($obj);
-    if (is_writable($file_name))
+    if (!is_null($file_name))
       file_put_contents($file_name,obj_serialize($obj));
   }
 ?>

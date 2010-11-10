@@ -51,7 +51,7 @@
     }
     private function _create_url_function($name, $parts, $path = false) {
       if ($this->is_readonly()) return;
-      $this->_functions[$name] = create_function('$params=array()',$this->_create_url($parts,$path));
+      $this->_functions[$name] = $this->_create_url($parts,$path);
     }
 
     public function connect($path, $params = array()) { $this->_connect($path,$params); }
@@ -64,7 +64,9 @@
     private function _build($name, $params = array()) {
       if (!array_key_exists($name,$this->_functions))
         throw new RoutingException('Tried to build undefined route');
-      return $this->_functions[$name]($params);
+      if ($f = RouteFunctions::exists($name)) return $f($params);
+      $f = RouteFunctions::set($name, $this->_functions[$name]);
+      return $f($params);
     }
 
     public function build_url($name, $params = array()) { return $this->_build($name.'_url',$params); }
