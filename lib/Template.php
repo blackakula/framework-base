@@ -74,6 +74,8 @@
     public static function setIMG($base_url) { self::$_img = $base_url; }
     public static function setICO($base_url) { self::$_icon = $base_url; }
 
+    public static function getIMG() { return self::$_img; }
+
     public function _css($src, $global = false, $media = 'screen') {
       if (!$global) $src = (self::$_css).$src;
       return '<link rel="stylesheet" href="'.htmlspecialchars($src).'" type="text/css" media="'.$media.'" />';
