@@ -31,7 +31,7 @@
       $regexp_str .= $str;
       if (!empty($str)) array_push($parts,$str);
       
-      return '^/'.$regexp_str.'$';
+      return '^/'.get_config('BASE_PATH').$regexp_str.'$';
     }
 
     private function _connect($path, $params = array(), &$parts = null) {
