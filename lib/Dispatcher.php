@@ -50,7 +50,7 @@
 
         self::$contoller = new $controller(self::$params);
         try { self::$contoller->$action(); } catch (Exception $e) {
-          throw new BaseException('Uncaught exception in action "'.$action.'" of controller "'.$controller.'": '.$e->getMessage());
+          throw new RuntimeException('Uncaught exception in action "'.$action.'" of controller "'.$controller.'": '.$e->getMessage());
         }
 
         if (!$h->is404()) {
