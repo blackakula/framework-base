@@ -145,7 +145,7 @@
       }else
         $params = false;
 
-      $close_tag = in_array($tag,array('br', 'hr', 'link', 'meta', 'img', 'input'));
+      $close_tag = in_array($tag,array('br', 'hr', 'link', 'meta', 'img', 'input', 'param'));
 
       $is_echo = ($arr[5] == '=');
       $content = ltrim($arr[6]);
